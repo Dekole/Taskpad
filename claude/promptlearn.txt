@@ -1,0 +1,36 @@
+I am creating a task management program. Some high level requirements of the program are as follows:
+- User shall be able to connect to a Google account upfront
+- All data shall be saved to a Google File in the directory "task-app". Program shall ask user to confirm dir name. The file name shall be "Task - Master" (google sheets file)
+- I have a UI/UX diagram I can upload for the first version of this
+- I want to future proof this task app by supporting different lists, shareable lists across accounts, and potentially linking to google Keep
+
+Some technical requirements I have:
+- For the current version, I Want to build it on Docker on my current machine with docker-compose
+- Backend: Python (FastAPI)
+- Frontend: React (Vite)
+- Not sure if i need cache
+- Use Docker + docker-compose for all services (please let me know if there are other services needed other than the main one)
+- Code should live locally and be mounted into containers
+- I want this app to be broken up into different architectural blocks for future maintenance. Please tell me what blocks you are thinking breaking it up in and have me confirm
+- This app shall have a REST API endpoint to access functions that can be performed on the GUI
+
+Can you ask questions and help me plan this application before writing code?
+
+
+
+
+
+
+Requirements:
+- Backend: Python (FastAPI)
+- Frontend: React (Vite)
+- Database: Postgres
+- Cache: Redis
+- Use Docker + docker-compose for all services
+- Code should live locally and be mounted into containers
+- Include:
+  - Dockerfile(s)
+  - docker-compose.yml
+  - folder structure
+
+Explain the structure simply so I understand what each part does.

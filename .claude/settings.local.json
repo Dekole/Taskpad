@@ -1,0 +1,15 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(docker compose logs *)",
+      "Bash(docker compose exec *)",
+      "Bash(docker compose *)",
+      "Bash(docker pull *)",
+      "Bash(curl *)",
+      "Bash(docker-credential-desktop.exe list *)",
+      "Bash(echo \"Started in background, PID: $!\")",
+      "Bash(wait)",
+      "Bash(docker-compose ps *)"
+    ]
+  }
+}
