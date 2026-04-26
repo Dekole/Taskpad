@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback } from "react";
 import { api } from "../lib/api";
 
-export function useTasks(userId) {
+export function useTasks(userId, onUnauthorized) {
   const [tasks, setTasks] = useState({ active: [], done: [], backlog: [], expired: [] });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -14,7 +14,11 @@ export function useTasks(userId) {
       const data = await api.getTasks(userId);
       setTasks(data);
     } catch (e) {
-      setError(e.message);
+      if (e.status === 401) {
+        onUnauthorized?.();
+      } else {
+        setError(e.message);
+      }
     } finally {
       setLoading(false);
     }

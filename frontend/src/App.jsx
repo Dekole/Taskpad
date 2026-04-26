@@ -49,7 +49,7 @@ export default function App() {
   };
 
   const { tasks, loading, error, fetchTasks, createTask, updateTask, resetStale, reorder, deleteTask } =
-    useTasks(user?.userId);
+    useTasks(user?.userId, handleLogout);
 
   return (
     <div className="min-h-screen bg-gray-50">
