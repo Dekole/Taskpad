@@ -3,6 +3,7 @@ import { UserAvatar } from "./components/UserAvatar";
 import { AddTaskBar } from "./components/AddTaskBar";
 import { TaskSection } from "./components/TaskSection";
 import { CsvImportModal } from "./components/CsvImportModal";
+import { LandingPage } from "./components/LandingPage";
 import { useTasks } from "./hooks/useTasks";
 import { API_BASE } from "./lib/utils";
 
@@ -67,10 +68,7 @@ export default function App() {
 
       <main className="max-w-3xl mx-auto px-4 py-6">
         {!user ? (
-          <div className="text-center py-20 text-gray-400">
-            <p className="text-lg font-medium mb-2">Sign in to get started</p>
-            <p className="text-sm">Connect your Google account to manage your tasks.</p>
-          </div>
+          <LandingPage />
         ) : (
           <>
             {error && (
