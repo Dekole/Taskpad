@@ -12,6 +12,7 @@ export default defineConfig({
   server: {
     host: "0.0.0.0",
     port: 3000,
+    allowedHosts: ["taskpad.duckdns.org"],
     watch: {
       usePolling: true, // needed for file watching inside Docker
     },
