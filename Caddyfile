@@ -1,4 +1,5 @@
 taskpad.duckdns.org {
+    reverse_proxy /webhook host.docker.internal:9000
     reverse_proxy /api/* backend:8080
     reverse_proxy * frontend:80
 }

@@ -1,0 +1,15 @@
+name: Deploy to production
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger deploy webhook
+        run: |
+          curl -f -X POST https://taskpad.duckdns.org/webhook \
+            -H "X-Webhook-Secret: ${{ secrets.WEBHOOK_SECRET }}"
