@@ -53,16 +53,17 @@ Legend: **[Local]** = your dev laptop/desktop · **[Home]** = always-on home ser
 - [ ] **[Home]** Confirm the file actually landed on disk in the right project folder with correct title.
 - [ ] **[Local]** Confirm Claude Code (reading the same home-server files over LAN/Tailscale) sees the new note immediately — no sync step required.
 
-### Blocker found 2026-08-02: Claude mobile/claude.ai connector UI wants OAuth, not a bearer token
+### Blocker found 2026-08-02, resolved same day: Claude mobile/claude.ai connector UI wants OAuth, not a bearer token ✅ DONE
 - The "Add custom connector" form (mobile *and* claude.ai desktop) only exposes **URL** + **Advanced Settings: OAuth Client ID / Client Secret** — there is no plain header/API-key field like Claude Code's CLI (`-H "Authorization: Bearer ..."`) has.
-- Our server only implements static bearer-token auth (Phase 3) — enough for Claude Code, not enough for the mobile/web connector UI.
-- Confirmed: tried leaving Advanced Settings blank, got: *"Couldn't register with taskpad_mcp's sign-in service. You can try again, or add an OAuth Client ID in the connector settings."* (ref `ofid_eb37e86b5f6003e0`) — Claude attempted Dynamic Client Registration and found no OAuth endpoints at all.
-- **Next step — implement minimal OAuth 2.1 on the MCP server:**
-  - `/.well-known/oauth-authorization-server` — metadata discovery.
-  - `/register` — Dynamic Client Registration (RFC7591), so Claude can self-register.
-  - `/authorize` — since single-user, can just be a simple password gate (something only the owner knows) rather than real accounts.
-  - `/token` — issues access tokens after authorization; needs PKCE support.
-  - Swap the `/mcp` auth check from "matches static `MCP_AUTH_TOKEN`" to "is a valid token this server itself issued."
+- Confirmed via actual error: *"Couldn't register with taskpad_mcp's sign-in service..."* — Claude attempted Dynamic Client Registration and found no OAuth endpoints at all.
+- **Implemented**, reusing `~/projects/task-app`'s existing Google Cloud OAuth client rather than creating a new one:
+  - `src/oauth.ts`, `src/oauthStore.ts` — full OAuth 2.1 layer: `/.well-known/oauth-authorization-server` (metadata), `/mcp/oauth/register` (DCR), `/mcp/oauth/authorize` (redirects to Google), `/mcp/oauth/google/callback` (verifies identity, gates by `ALLOWED_GOOGLE_EMAIL`, issues our own code), `/mcp/oauth/token` (PKCE S256, issues signed JWT access + refresh tokens).
+  - `/mcp` now accepts **either** the static bearer token (Claude Code CLI, unchanged) **or** a valid JWT from this flow (Claude mobile/web).
+  - New env vars on home server: `PUBLIC_BASE_URL`, `GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET`, `ALLOWED_GOOGLE_EMAIL`, `MCP_JWT_SECRET`.
+  - New VPS Caddy route: `/.well-known/oauth-authorization-server` at domain root (only new route needed — everything else piggybacks on the existing `/mcp/*` route).
+  - `docker-compose.yml` volume widened from `./data/notes:/data/notes` to `./data:/data` so `data/oauth/clients.json` (registered client persistence) also survives restarts.
+  - Verified: `curl https://taskpad.duckdns.org/.well-known/oauth-authorization-server` returns correct metadata JSON.
+- **Not yet tested:** actually completing the connector flow in Claude mobile/claude.ai (add connector → Google sign-in redirect → token issuance → tool calls). This is the true end-to-end test, next up.
   - Bigger, deliberate feature — not a quick patch. Not started yet.
 
 ## Phase 7 — Durability — ⏸ DEFERRED, come back to this
