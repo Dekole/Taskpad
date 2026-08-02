@@ -49,9 +49,15 @@ Legend: **[Local]** = your dev laptop/desktop · **[Home]** = always-on home ser
 
 ## Phase 6 — End-to-end test
 - [x] **[Local]** Verified via `curl` from laptop through the full public chain: 401 without token, 405 with valid token.
-- [ ] From **Claude mobile** (off your home network, e.g. cellular): create a project, save a note, list notes, search. ← next up
+- [ ] From **Claude mobile** (off your home network, e.g. cellular): create a project, save a note, list notes, search. ← blocked, see below
 - [ ] **[Home]** Confirm the file actually landed on disk in the right project folder with correct title.
 - [ ] **[Local]** Confirm Claude Code (reading the same home-server files over LAN/Tailscale) sees the new note immediately — no sync step required.
+
+### Blocker found 2026-08-02: Claude mobile/claude.ai connector UI wants OAuth, not a bearer token
+- The "Add custom connector" form (mobile *and* claude.ai desktop) only exposes **URL** + **Advanced Settings: OAuth Client ID / Client Secret** — there is no plain header/API-key field like Claude Code's CLI (`-H "Authorization: Bearer ..."`) has.
+- Our server only implements static bearer-token auth (Phase 3) — enough for Claude Code, not enough for the mobile/web connector UI.
+- Tried leaving Advanced Settings blank and connecting with just the URL — Claude will likely attempt OAuth discovery against our server and fail. Need to see the actual error next session to confirm.
+- **Next step:** implement a minimal OAuth 2.1 authorization layer on the MCP server (client registration + token issuance) so the mobile/claude.ai connector flow works — bigger, deliberate piece of work, not a quick patch. Deferred to next session.
 
 ## Phase 7 — Durability — ⏸ DEFERRED, come back to this
 - [ ] **[User]** Decide where the off-box backup remote lives. Leaning **GitHub (private repo)** as of 2026-08-02, but not decided — reconsider before committing:
