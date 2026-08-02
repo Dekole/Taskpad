@@ -56,8 +56,14 @@ Legend: **[Local]** = your dev laptop/desktop · **[Home]** = always-on home ser
 ### Blocker found 2026-08-02: Claude mobile/claude.ai connector UI wants OAuth, not a bearer token
 - The "Add custom connector" form (mobile *and* claude.ai desktop) only exposes **URL** + **Advanced Settings: OAuth Client ID / Client Secret** — there is no plain header/API-key field like Claude Code's CLI (`-H "Authorization: Bearer ..."`) has.
 - Our server only implements static bearer-token auth (Phase 3) — enough for Claude Code, not enough for the mobile/web connector UI.
-- Tried leaving Advanced Settings blank and connecting with just the URL — Claude will likely attempt OAuth discovery against our server and fail. Need to see the actual error next session to confirm.
-- **Next step:** implement a minimal OAuth 2.1 authorization layer on the MCP server (client registration + token issuance) so the mobile/claude.ai connector flow works — bigger, deliberate piece of work, not a quick patch. Deferred to next session.
+- Confirmed: tried leaving Advanced Settings blank, got: *"Couldn't register with taskpad_mcp's sign-in service. You can try again, or add an OAuth Client ID in the connector settings."* (ref `ofid_eb37e86b5f6003e0`) — Claude attempted Dynamic Client Registration and found no OAuth endpoints at all.
+- **Next step — implement minimal OAuth 2.1 on the MCP server:**
+  - `/.well-known/oauth-authorization-server` — metadata discovery.
+  - `/register` — Dynamic Client Registration (RFC7591), so Claude can self-register.
+  - `/authorize` — since single-user, can just be a simple password gate (something only the owner knows) rather than real accounts.
+  - `/token` — issues access tokens after authorization; needs PKCE support.
+  - Swap the `/mcp` auth check from "matches static `MCP_AUTH_TOKEN`" to "is a valid token this server itself issued."
+  - Bigger, deliberate feature — not a quick patch. Not started yet.
 
 ## Phase 7 — Durability — ⏸ DEFERRED, come back to this
 - [ ] **[User]** Decide where the off-box backup remote lives. Leaning **GitHub (private repo)** as of 2026-08-02, but not decided — reconsider before committing:
