@@ -5,7 +5,7 @@ services:
     container_name: taskpad-mcp
     restart: unless-stopped
     ports:
-      - "3000:3000"
+      - "3002:3000"
     environment:
       - NOTES_DIR=/data/notes
       - MCP_AUTH_TOKEN=${MCP_AUTH_TOKEN:-}
