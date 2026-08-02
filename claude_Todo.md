@@ -14,24 +14,24 @@ Legend: **[Local]** = your dev laptop/desktop · **[Home]** = always-on home ser
 
 ---
 
-## Phase 1 — File layer + bare MCP server (no networking yet)
-- [ ] **[Local]** Design note/project file layout: `notes/<project>/<title>.md`, title on first line, `default` project folder.
-- [ ] **[Local]** Scaffold MCP server project (pick language/runtime, e.g. Node/TS or Python).
-- [ ] **[Local]** Implement core tools: `create_project`, `list_projects`, `save_note`, `get_note`, `list_notes`, `search_notes`.
-- [ ] **[Local]** Enforce req logic in-server (not prompt-reliant): missing project → `default`, missing/blank title → derive or reject.
-- [ ] **[Local]** Run server over stdio, wire into local Claude Code, test create/save/list/search end-to-end against a local test folder.
+## Phase 1 — File layer + bare MCP server (no networking yet) ✅ DONE
+- [x] **[Local]** Design note/project file layout: `notes/<project>/<title>.md`, title on first line, `default` project folder.
+- [x] **[Local]** Scaffold MCP server project (pick language/runtime, e.g. Node/TS or Python). → TypeScript/Node.
+- [x] **[Local]** Implement core tools: `create_project`, `list_projects`, `save_note`, `get_note`, `list_notes`, `search_notes`.
+- [x] **[Local]** Enforce req logic in-server (not prompt-reliant): missing project → `default`, missing/blank title → derive or reject.
+- [x] **[Local]** Run server over stdio, wire into local Claude Code, test create/save/list/search end-to-end against a local test folder. → skipped straight to HTTP + Docker.
 
-## Phase 2 — Move to Home Server, run as a real service
-- [ ] **[Home]** Provision the notes directory on persistent storage (not a tmp/cache disk).
-- [ ] **[Home]** Deploy the MCP server code to the home server (git pull / rsync / container).
-- [ ] **[Home]** Switch transport from stdio to network (HTTP/SSE), bind to a local port.
-- [ ] **[Home]** Wrap it as a systemd service (or Docker container with `restart: always`) so it survives reboots/crashes.
-- [ ] **[Home]** Verify from another device on the LAN that it responds.
+## Phase 2 — Move to Home Server, run as a real service ✅ DONE
+- [x] **[Home]** Provision the notes directory on persistent storage. → `~/taskpad_mcp/data/notes` bind mount.
+- [x] **[Home]** Deploy the MCP server code to the home server (scp'd, not git clone yet).
+- [x] **[Home]** Switch transport from stdio to network (HTTP), bind to a local port. → stateless Streamable HTTP, port 3002 (3000 was taken by another container).
+- [x] **[Home]** Wrap it as a real service. → Docker + `docker-compose.yml`, `restart: unless-stopped` (no systemd unit needed).
+- [x] **[Home]** Verify from another device on the LAN that it responds. → confirmed via `curl` and Claude Code from laptop.
 
-## Phase 3 — Auth on the MCP server itself
-- [ ] **[Home]** Generate a bearer token / API key; store as a secret (env var / systemd `EnvironmentFile`, not in git).
-- [ ] **[Home]** Require the token on every request; reject unauthenticated calls.
-- [ ] **[Local]** Confirm local Claude Code / test client still works with the token.
+## Phase 3 — Auth on the MCP server itself ✅ DONE
+- [x] **[Home]** Generate a bearer token; store as a secret. → in `.env` on home server (gitignored), read via `MCP_AUTH_TOKEN`.
+- [x] **[Home]** Require the token on every request; reject unauthenticated calls. → verified 401 without token.
+- [x] **[Local]** Confirm local Claude Code / test client still works with the token. → re-registered `taskpad` at user scope with `Authorization` header.
 
 ## Phase 4 — Tailscale bridge
 - [ ] **[Home]** Install Tailscale, join your tailnet, confirm it gets a stable tailnet IP/hostname.
@@ -51,10 +51,14 @@ Legend: **[Local]** = your dev laptop/desktop · **[Home]** = always-on home ser
 - [ ] **[Home]** Confirm the file actually landed on disk in the right project folder with correct title.
 - [ ] **[Local]** Confirm Claude Code (reading the same home-server files over LAN/Tailscale) sees the new note immediately — no sync step required.
 
-## Phase 7 — Durability
-- [ ] **[Home]** Init the notes directory as a git repo.
-- [ ] **[Home]** Commit-on-write (server-side hook) or a periodic cron commit.
-- [ ] **[Home]** Push that git repo somewhere off-box (could be the VPS as a bare git remote, or any git host) — this is backup only, VPS still never holds live/served note data.
+## Phase 7 — Durability — ⏸ DEFERRED, come back to this
+- [ ] **[User]** Decide where the off-box backup remote lives. Leaning **GitHub (private repo)** as of 2026-08-02, but not decided — reconsider before committing:
+  - GitHub/GitLab private repo: easy, free, genuinely not public — but still a third party holding your personal notes, same category of trade-off that ruled out Notion/Google Docs earlier in this project. Worth being deliberate about, not just defaulting to it out of familiarity.
+  - Self-hosted remote on the **VPS** (`git init --bare` there, push over SSH/Tailscale) once it exists: zero third parties, consistent with the rest of this architecture, no new accounts. No extra infra cost since the VPS is being built anyway.
+  - Local-only (no off-box copy): current state — accepted for now, revisit before this is the sole copy of anything you'd be upset to lose.
+- [ ] **[Home]** Init the notes directory as its own git repo (separate from the app repo — notes are gitignored from `taskpad_mcp`). Script already written: `scripts/backup-notes.sh`.
+- [ ] **[Home]** Cron the backup script (e.g. every 15 min) for local version history.
+- [ ] **[Home]** Once remote is decided: `git remote add origin <...>` + push step in the script.
 
 ## Phase 8 — VFuture: task lists
 - [ ] **[Local]** Extend note schema/tools with a `status` field (open/done) and task-specific tools once notes are stable.
@@ -63,5 +67,5 @@ Legend: **[Local]** = your dev laptop/desktop · **[Home]** = always-on home ser
 
 ## Open decisions to revisit
 - Does Claude Code run **directly on Home Server**, or on **Local Machine** mounting Home Server's files over LAN/Tailscale? (Either works; former is simpler, latter keeps your normal dev environment.)
-- Runtime/language for the MCP server.
-- Where the backup git remote lives.
+- ~~Runtime/language for the MCP server.~~ → TypeScript/Node, decided.
+- **Where the backup git remote lives** (see Phase 7) — user leaning GitHub private repo, not final.
