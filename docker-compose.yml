@@ -8,6 +8,12 @@ services:
       - "3002:3000"
     environment:
       - NOTES_DIR=/data/notes
+      - OAUTH_DIR=/data/oauth
       - MCP_AUTH_TOKEN=${MCP_AUTH_TOKEN:-}
+      - PUBLIC_BASE_URL=${PUBLIC_BASE_URL:-}
+      - GOOGLE_CLIENT_ID=${GOOGLE_CLIENT_ID:-}
+      - GOOGLE_CLIENT_SECRET=${GOOGLE_CLIENT_SECRET:-}
+      - ALLOWED_GOOGLE_EMAIL=${ALLOWED_GOOGLE_EMAIL:-}
+      - MCP_JWT_SECRET=${MCP_JWT_SECRET:-}
     volumes:
-      - ./data/notes:/data/notes
+      - ./data:/data

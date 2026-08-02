@@ -14,8 +14,9 @@ RUN npm install --omit=dev
 COPY --from=build /app/dist ./dist
 
 ENV NOTES_DIR=/data/notes
+ENV OAUTH_DIR=/data/oauth
 ENV PORT=3000
-VOLUME ["/data/notes"]
+VOLUME ["/data"]
 EXPOSE 3000
 
 CMD ["node", "dist/index.js"]

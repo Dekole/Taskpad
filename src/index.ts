@@ -1,6 +1,7 @@
 import express, { type Request, type Response, type NextFunction } from "express";
 import { StreamableHTTPServerTransport } from "@modelcontextprotocol/sdk/server/streamableHttp.js";
 import { createServer } from "./server.js";
+import { createOAuthRouter, oauthMetadataHandler, verifyAccessToken } from "./oauth.js";
 
 const PORT = Number(process.env.PORT ?? 3000);
 const AUTH_TOKEN = process.env.MCP_AUTH_TOKEN;
@@ -12,6 +13,9 @@ app.get("/healthz", (_req, res) => {
   res.status(200).json({ status: "ok" });
 });
 
+app.get("/.well-known/oauth-authorization-server", oauthMetadataHandler);
+app.use("/mcp/oauth", createOAuthRouter());
+
 function requireAuth(req: Request, res: Response, next: NextFunction) {
   if (!AUTH_TOKEN) {
     // No token configured: auth disabled (local/dev testing only).
@@ -19,12 +23,15 @@ function requireAuth(req: Request, res: Response, next: NextFunction) {
     return;
   }
   const header = req.header("authorization") ?? "";
-  const expected = `Bearer ${AUTH_TOKEN}`;
-  if (header !== expected) {
-    res.status(401).json({ error: "Unauthorized" });
+  const token = header.startsWith("Bearer ") ? header.slice(7) : "";
+
+  // Accept either the static token (Claude Code CLI) or a valid signed
+  // access token from the Google-backed OAuth flow (Claude mobile/web).
+  if (token === AUTH_TOKEN || (token && verifyAccessToken(token))) {
+    next();
     return;
   }
-  next();
+  res.status(401).json({ error: "Unauthorized" });
 }
 
 app.post("/mcp", requireAuth, async (req: Request, res: Response) => {
