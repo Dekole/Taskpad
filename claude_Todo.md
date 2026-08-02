@@ -22,7 +22,7 @@ Legend: **[Local]** = your dev laptop/desktop · **[Home]** = always-on home ser
 - [x] **[Local]** Run server over stdio, wire into local Claude Code, test create/save/list/search end-to-end against a local test folder. → skipped straight to HTTP + Docker.
 
 ## Phase 2 — Move to Home Server, run as a real service ✅ DONE
-- [x] **[Home]** Provision the notes directory on persistent storage. → `~/taskpad_mcp/data/notes` bind mount.
+- [x] **[Home]** Provision the notes directory on persistent storage. → `~/projects/taskpad_mcp/data/notes` bind mount.
 - [x] **[Home]** Deploy the MCP server code to the home server (scp'd, not git clone yet).
 - [x] **[Home]** Switch transport from stdio to network (HTTP), bind to a local port. → stateless Streamable HTTP, port 3002 (3000 was taken by another container).
 - [x] **[Home]** Wrap it as a real service. → Docker + `docker-compose.yml`, `restart: unless-stopped` (no systemd unit needed).
@@ -33,21 +33,23 @@ Legend: **[Local]** = your dev laptop/desktop · **[Home]** = always-on home ser
 - [x] **[Home]** Require the token on every request; reject unauthenticated calls. → verified 401 without token.
 - [x] **[Local]** Confirm local Claude Code / test client still works with the token. → re-registered `taskpad` at user scope with `Authorization` header.
 
-## Phase 4 — Tailscale bridge
-- [ ] **[Home]** Install Tailscale, join your tailnet, confirm it gets a stable tailnet IP/hostname.
-- [ ] **[VPS]** Install Tailscale, join the same tailnet.
-- [ ] **[VPS]** Confirm VPS can reach the home server's tailnet address + MCP port (`curl` test with the bearer token).
-- [ ] Do **not** open any port on the home router — this step should require zero router config.
+## Phase 4 — Tailscale bridge ✅ DONE
+- [x] **[Home]** Install Tailscale, join tailnet. → tailnet IP `100.125.184.106`.
+- [x] **[VPS]** Install Tailscale, join the same tailnet.
+- [x] **[VPS]** Confirm VPS can reach the home server's tailnet address + MCP port. → verified via curl through the full chain.
+- [x] No home router config touched — confirmed zero port-forwarding needed.
 
-## Phase 5 — Public gateway on the VPS
-- [ ] **[VPS]** Point your domain's DNS at the VPS.
-- [ ] **[VPS]** Install Caddy (or nginx) as reverse proxy; Caddy auto-provisions TLS via Let's Encrypt for the domain.
-- [ ] **[VPS]** Configure proxy to forward `https://your-domain.com/*` → home server's tailnet address:port.
-- [ ] **[VPS]** Decide auth location: token checked at the proxy vs. passed through to the home server (recommend: proxy forwards it through, home server is the one that actually validates — proxy stays dumb/stateless).
-- [ ] **[VPS]** Confirm proxy has no persistent notes data anywhere — logs only, no note content written to disk on the VPS.
+## Phase 5 — Public gateway on the VPS ✅ DONE
+- [x] **[VPS]** DNS already existed: `taskpad.duckdns.org`.
+- [x] **[VPS]** Reused the VPS's *existing* Caddy container (`taskpad-caddy-1`, part of an unrelated app already running there) rather than installing a second reverse proxy — added a new route instead of fighting over ports 80/443.
+- [x] **[VPS]** Routed **path-based**, not subdomain: `https://taskpad.duckdns.org/mcp` and `/mcp/*` → `100.125.184.106:3002`, via explicit `handle` blocks (bare repeated `reverse_proxy` directives with matchers silently dropped one route — `handle` blocks are the reliable pattern).
+- [x] **[VPS]** Auth passed through to the home server, which is the one that actually validates — proxy itself stays dumb/stateless.
+- [x] **[VPS]** Confirmed no notes data touches the VPS — Caddy only proxies.
+- Gotchas hit and fixed, worth remembering: (1) editing the Caddyfile via `scp` replaces the inode, so Docker's single-file bind mount kept serving the *old* file until the container was restarted (`docker restart taskpad-caddy-1`) — `cat` on the host looked right the whole time, only `docker exec ... cat` inside the container revealed the mismatch; (2) the `.env` holding `MCP_AUTH_TOKEN` on the home server ended up empty at one point (likely a `docker compose up` run without it present) — silently disabled auth until caught by a curl test returning 405 instead of the expected 401.
 
 ## Phase 6 — End-to-end test
-- [ ] From **Claude mobile** (off your home network, e.g. cellular): create a project, save a note, list notes, search.
+- [x] **[Local]** Verified via `curl` from laptop through the full public chain: 401 without token, 405 with valid token.
+- [ ] From **Claude mobile** (off your home network, e.g. cellular): create a project, save a note, list notes, search. ← next up
 - [ ] **[Home]** Confirm the file actually landed on disk in the right project folder with correct title.
 - [ ] **[Local]** Confirm Claude Code (reading the same home-server files over LAN/Tailscale) sees the new note immediately — no sync step required.
 
