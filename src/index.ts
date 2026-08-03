@@ -1,5 +1,7 @@
+import { randomUUID } from "node:crypto";
 import express, { type Request, type Response, type NextFunction } from "express";
 import { StreamableHTTPServerTransport } from "@modelcontextprotocol/sdk/server/streamableHttp.js";
+import { isInitializeRequest } from "@modelcontextprotocol/sdk/types.js";
 import { createServer } from "./server.js";
 import { createOAuthRouter, oauthMetadataHandler, verifyAccessToken } from "./oauth.js";
 
@@ -34,15 +36,52 @@ function requireAuth(req: Request, res: Response, next: NextFunction) {
   res.status(401).json({ error: "Unauthorized" });
 }
 
+// Sessions are kept alive in memory so clients can establish a connection
+// once (via `initialize`) and reuse it for subsequent tool calls, instead of
+// every request starting from a blank slate.
+const SESSION_IDLE_TIMEOUT_MS = 60 * 60 * 1000; // 1 hour
+interface Session {
+  transport: StreamableHTTPServerTransport;
+  lastActivity: number;
+}
+const sessions = new Map<string, Session>();
+
+setInterval(() => {
+  const now = Date.now();
+  for (const [sessionId, session] of sessions) {
+    if (now - session.lastActivity > SESSION_IDLE_TIMEOUT_MS) {
+      session.transport.close();
+      sessions.delete(sessionId);
+    }
+  }
+}, 5 * 60 * 1000).unref();
+
 app.post("/mcp", requireAuth, async (req: Request, res: Response) => {
   try {
-    const server = createServer();
-    const transport = new StreamableHTTPServerTransport({ sessionIdGenerator: undefined });
-    res.on("close", () => {
-      transport.close();
-      server.close();
-    });
-    await server.connect(transport);
+    const sessionId = req.header("mcp-session-id");
+    let transport: StreamableHTTPServerTransport;
+
+    if (sessionId && sessions.has(sessionId)) {
+      const session = sessions.get(sessionId)!;
+      session.lastActivity = Date.now();
+      transport = session.transport;
+    } else if (!sessionId && isInitializeRequest(req.body)) {
+      transport = new StreamableHTTPServerTransport({
+        sessionIdGenerator: () => randomUUID(),
+        onsessioninitialized: (newSessionId) => {
+          sessions.set(newSessionId, { transport, lastActivity: Date.now() });
+        },
+      });
+      transport.onclose = () => {
+        if (transport.sessionId) sessions.delete(transport.sessionId);
+      };
+      const server = createServer();
+      await server.connect(transport);
+    } else {
+      res.status(400).json({ error: "Bad Request: no valid session ID provided" });
+      return;
+    }
+
     await transport.handleRequest(req, res, req.body);
   } catch (err) {
     console.error("Error handling MCP request:", err);
@@ -52,13 +91,19 @@ app.post("/mcp", requireAuth, async (req: Request, res: Response) => {
   }
 });
 
-// Stateless server: no sessions to resume (GET) or terminate (DELETE).
-app.get("/mcp", requireAuth, (_req, res) => {
-  res.status(405).json({ error: "Method not allowed (stateless server)" });
-});
-app.delete("/mcp", requireAuth, (_req, res) => {
-  res.status(405).json({ error: "Method not allowed (stateless server)" });
-});
+async function handleSessionRequest(req: Request, res: Response) {
+  const sessionId = req.header("mcp-session-id");
+  const session = sessionId ? sessions.get(sessionId) : undefined;
+  if (!session) {
+    res.status(400).json({ error: "Invalid or missing session ID" });
+    return;
+  }
+  session.lastActivity = Date.now();
+  await session.transport.handleRequest(req, res);
+}
+
+app.get("/mcp", requireAuth, handleSessionRequest);
+app.delete("/mcp", requireAuth, handleSessionRequest);
 
 app.listen(PORT, () => {
   console.log(`taskpad-mcp listening on port ${PORT} (auth ${AUTH_TOKEN ? "enabled" : "DISABLED"})`);
