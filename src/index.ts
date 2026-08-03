@@ -11,6 +11,14 @@ const AUTH_TOKEN = process.env.MCP_AUTH_TOKEN;
 const app = express();
 app.use(express.json());
 
+app.use((req: Request, res: Response, next: NextFunction) => {
+  const start = Date.now();
+  res.on("finish", () => {
+    console.log(`${req.method} ${req.originalUrl} -> ${res.statusCode} (${Date.now() - start}ms)`);
+  });
+  next();
+});
+
 app.get("/healthz", (_req, res) => {
   res.status(200).json({ status: "ok" });
 });
