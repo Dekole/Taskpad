@@ -47,11 +47,12 @@ Legend: **[Local]** = your dev laptop/desktop · **[Home]** = always-on home ser
 - [x] **[VPS]** Confirmed no notes data touches the VPS — Caddy only proxies.
 - Gotchas hit and fixed, worth remembering: (1) editing the Caddyfile via `scp` replaces the inode, so Docker's single-file bind mount kept serving the *old* file until the container was restarted (`docker restart taskpad-caddy-1`) — `cat` on the host looked right the whole time, only `docker exec ... cat` inside the container revealed the mismatch; (2) the `.env` holding `MCP_AUTH_TOKEN` on the home server ended up empty at one point (likely a `docker compose up` run without it present) — silently disabled auth until caught by a curl test returning 405 instead of the expected 401.
 
-## Phase 6 — End-to-end test
+## Phase 6 — End-to-end test ✅ CORE PROVEN (2026-08-02)
 - [x] **[Local]** Verified via `curl` from laptop through the full public chain: 401 without token, 405 with valid token.
-- [ ] From **Claude mobile** (off your home network, e.g. cellular): create a project, save a note, list notes, search. ← blocked, see below
-- [ ] **[Home]** Confirm the file actually landed on disk in the right project folder with correct title.
-- [ ] **[Local]** Confirm Claude Code (reading the same home-server files over LAN/Tailscale) sees the new note immediately — no sync step required.
+- [x] From **Claude mobile**: OAuth connector flow completed (Google sign-in, gated by `ALLOWED_GOOGLE_EMAIL`), and a real tool call (`list my taskpad projects`) succeeded end-to-end.
+- [ ] **[Home]** Confirm a saved note actually lands on disk in the right project folder with correct title — do this on next real save.
+- [ ] **[Local]** Confirm Claude Code (reading the same home-server files over LAN/Tailscale) sees the new note immediately.
+- **Known quirk, not a bug in our code:** connector tool calls from mobile/web are intermittent — Claude itself reported *"the tool needs to be reloaded periodically via search before I can call it; it doesn't stay reliably registered across turns."* This matches how Claude clients generally handle deferred/remote-connector tools (search-based discovery, not permanently loaded) — a client-side behavior, not something to keep debugging server-side. Workaround: explicitly mention "taskpad" by name if a request doesn't seem to find the tool.
 
 ### Blocker found 2026-08-02, resolved same day: Claude mobile/claude.ai connector UI wants OAuth, not a bearer token ✅ DONE
 - The "Add custom connector" form (mobile *and* claude.ai desktop) only exposes **URL** + **Advanced Settings: OAuth Client ID / Client Secret** — there is no plain header/API-key field like Claude Code's CLI (`-H "Authorization: Bearer ..."`) has.
