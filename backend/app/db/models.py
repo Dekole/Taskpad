@@ -1,4 +1,5 @@
-from sqlalchemy import Column, String, Boolean, Integer, ForeignKey
+from sqlalchemy import Column, String, Boolean, Integer, ForeignKey, Text
+from sqlalchemy.dialects.postgresql import JSONB
 from app.db.database import Base
 
 
@@ -22,3 +23,19 @@ class Task(Base):
     task_order = Column(Integer, default=0)
     last_modified = Column(String, default="")
     never_stale = Column(Boolean, default=False)
+
+
+class Pad(Base):
+    __tablename__ = "pad"
+
+    id = Column(String, primary_key=True)
+    user_id = Column(String, ForeignKey("users.id"), nullable=False, index=True)
+    parent_id = Column(String, ForeignKey("pad.id"), nullable=True, index=True)
+    type = Column(String, nullable=False)  # "folder" | "note" | "person" | "journal"
+    name = Column(String, nullable=False)
+    depth = Column(Integer, nullable=False)  # 1-5, server-computed, reject if > 5
+    content = Column(Text, default="")
+    summary = Column(Text, nullable=True)
+    summary_updated_at = Column(String, nullable=True)
+    metadata_json = Column(JSONB, default=dict)
+    last_modified = Column(String, default="")
