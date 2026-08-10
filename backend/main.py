@@ -3,7 +3,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from dotenv import load_dotenv
 
-from app.routers import auth, tasks
+from app.routers import auth, tasks, pad
 from app.routers import import_csv
 
 load_dotenv()
@@ -21,6 +21,7 @@ app.add_middleware(
 app.include_router(auth.router, prefix="/api/auth", tags=["auth"])
 app.include_router(tasks.router, prefix="/api/tasks", tags=["tasks"])
 app.include_router(import_csv.router, prefix="/api/import/csv", tags=["import"])
+app.include_router(pad.router, prefix="/api/pad", tags=["pad"])
 
 
 @app.on_event("startup")
