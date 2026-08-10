@@ -1,6 +1,6 @@
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { z } from "zod";
-import * as storage from "./storage.js";
+import * as storage from "./api-client.js";
 
 function textResult(text: string) {
   return { content: [{ type: "text" as const, text }] };

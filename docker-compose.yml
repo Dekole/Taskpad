@@ -5,9 +5,8 @@ services:
     container_name: taskpad-mcp
     restart: unless-stopped
     ports:
-      - "3002:3000"
+      - "127.0.0.1:3003:3000"
     environment:
-      - NOTES_DIR=/data/notes
       - OAUTH_DIR=/data/oauth
       - MCP_AUTH_TOKEN=${MCP_AUTH_TOKEN:-}
       - PUBLIC_BASE_URL=${PUBLIC_BASE_URL:-}
@@ -15,5 +14,16 @@ services:
       - GOOGLE_CLIENT_SECRET=${GOOGLE_CLIENT_SECRET:-}
       - ALLOWED_GOOGLE_EMAIL=${ALLOWED_GOOGLE_EMAIL:-}
       - MCP_JWT_SECRET=${MCP_JWT_SECRET:-}
+      - TASKPAD_API_URL=${TASKPAD_API_URL:-}
+      - TASKPAD_SERVICE_TOKEN=${TASKPAD_SERVICE_TOKEN:-}
+      - TASKPAD_USER_ID=${TASKPAD_USER_ID:-}
     volumes:
       - ./data:/data
+    networks:
+      - default
+      - shared
+
+networks:
+  shared:
+    external: true
+    name: taskpad_default
