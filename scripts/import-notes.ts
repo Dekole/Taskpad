@@ -98,7 +98,11 @@ async function findOrCreateNote(
 
 async function main() {
   const entries = await fs.readdir(NOTES_DIR, { withFileTypes: true });
-  const projectDirs = entries.filter((e) => e.isDirectory());
+  // Excludes dotfiles/dot-directories - notably `.git`, which backup-notes.sh
+  // (Block 0) initializes inside this same directory and which the first
+  // real run of this script incorrectly imported as an empty "project"
+  // before this filter was added.
+  const projectDirs = entries.filter((e) => e.isDirectory() && !e.name.startsWith("."));
 
   let createdFolders = 0;
   let createdNotes = 0;
