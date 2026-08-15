@@ -1,6 +1,15 @@
 # Taskpad Suite Execution 2: Postgres backup (Home Server + Google Drive)
 
-**Status: planned, not started.**
+**Status: DONE. All 3 phases executed and verified 2026-08-14/15.** Daily cron at 3am
+pulls a fresh `pg_dump` from the VPS over Tailscale, saves it locally on the Home Server,
+and uploads it to Google Drive (`gdrive:taskpad-backups/`) — both kept forever. One
+deviation from the original plan worth noting: `rclone` (and its Google Drive OAuth
+client) ended up installed on **this laptop** too, not just the Home Server, since the
+interactive `rclone authorize` browser step needed to run somewhere with a browser and
+WSL2's localhost port-forwarding made that the easiest path — the laptop's copy was only
+used to generate the auth token pasted into the Home Server's config, it plays no
+ongoing role in the actual backup pipeline (which runs entirely via the Home Server's
+cron job).
 
 **Scope**: implement spec §9 (updated 2026-08-14) — back up the live `pad`/`tasks` data
 in `taskpad-db-1` (VPS) to two places: a local timestamped copy on the Home Server, and
