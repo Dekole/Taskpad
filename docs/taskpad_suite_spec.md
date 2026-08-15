@@ -101,9 +101,36 @@ New router, e.g. `app/routers/pad.py`:
 
 ## 9. Backup
 
+**Updated 2026-08-14** (original version below ran the dump from the VPS; revised to a
+pull model with a second destination, per user decision):
+
+- **Pull, not push, and Home Server initiates.** A cron job on the **Home Server** SSHes
+  into the VPS over Tailscale (not the public IP/port) to run
+  `docker exec taskpad-db-1 pg_dump -U taskapp taskapp`, and pulls the dump down. The VPS
+  never holds a credential that lets it reach into the home network — it only ever gets
+  connected to. Rationale: VPS is the more exposed machine (public-facing) and was
+  already flagged as the higher security priority (§10) — the more-trusted machine
+  should hold the credential, not the more-exposed one.
+- **Dedicated, forced-command-restricted SSH key.** Not the user's personal key. Added to
+  the VPS's `authorized_keys` with a forced command
+  (`command="docker exec taskpad-db-1 pg_dump -U taskapp taskapp",no-port-forwarding,no-agent-forwarding,no-pty`),
+  so that key can never be used for anything else, even if compromised.
+- **Two destinations from one pull**: Home Server keeps a local timestamped copy, and
+  separately uploads the same dump to Google Drive via `rclone` (Drive backend, avoids
+  writing custom Drive API code). Google Drive credentials (`rclone`'s OAuth token) live
+  only on the Home Server, never on the VPS.
+- No encryption in v1 per explicit decision — revisit only if asked.
+- Retain last N days (e.g. 14) on **both** the local Home Server copy and the Drive
+  side, deleted by the same cron script.
+
+<details>
+<summary>Original version (2026-08-08), superseded above</summary>
+
 - Daily cron on the VPS: `docker exec taskpad-db-1 pg_dump -U taskapp taskapp > dump.sql`, then upload via `rclone` to a Google Drive folder (rclone has a Drive backend, avoids writing custom Drive API code).
 - No encryption in v1 per explicit decision — revisit only if asked.
 - Retain last N days (e.g. 14), delete older dumps on the Drive side via the same cron script.
+
+</details>
 
 ## 10. Security priorities (user-stated: VPS security is the higher concern, more than Google trust)
 
