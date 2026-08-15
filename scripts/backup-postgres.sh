@@ -3,6 +3,8 @@ set -e
 BACKUP_DIR="$HOME/taskpad-pg-backups"
 VPS_TAILSCALE_IP="100.89.0.105"
 SSH_KEY="$HOME/.ssh/taskpad_pgbackup"
+RCLONE="$HOME/.local/bin/rclone"
+DRIVE_REMOTE="gdrive:taskpad-backups"
 TIMESTAMP=$(date +%Y%m%d-%H%M%S)
 OUT_FILE="$BACKUP_DIR/taskpad-$TIMESTAMP.sql"
 TMP_FILE="$OUT_FILE.tmp"
@@ -18,3 +20,5 @@ if [ ! -s "$TMP_FILE" ]; then
 fi
 
 mv "$TMP_FILE" "$OUT_FILE"
+
+"$RCLONE" copy "$OUT_FILE" "$DRIVE_REMOTE/"
