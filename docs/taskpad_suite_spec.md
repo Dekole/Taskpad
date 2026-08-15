@@ -120,8 +120,10 @@ pull model with a second destination, per user decision):
   writing custom Drive API code). Google Drive credentials (`rclone`'s OAuth token) live
   only on the Home Server, never on the VPS.
 - No encryption in v1 per explicit decision — revisit only if asked.
-- Retain last N days (e.g. 14) on **both** the local Home Server copy and the Drive
-  side, deleted by the same cron script.
+- **Retain forever, on both the local Home Server copy and the Drive side** (revised
+  2026-08-14, was "last 14 days" — at current usage, ~50 KB/backup and ~3.9 KB/day of
+  new content, a full year of daily snapshots is only ~250-300 MB, negligible against
+  either destination's available space; revisit only if that changes).
 
 <details>
 <summary>Original version (2026-08-08), superseded above</summary>
