@@ -24,40 +24,77 @@ on the Home Server, never touches the VPS.
 
 ## Plan
 
-1. **Generate a dedicated SSH keypair on the Home Server** (ed25519, no passphrase —
-   needs to run unattended via cron; the forced-command restriction below is the actual
-   security boundary, not key secrecy).
+### Phase 1 — Establish connection between VPS and Home Server
+
+The credential that lets the Home Server reach into the VPS to trigger a dump. Nothing
+here touches Google Drive yet.
+
+1. **Generate a dedicated SSH keypair on the Home Server**, used for nothing else:
+   ```
+   ssh-keygen -t ed25519 -f ~/.ssh/taskpad_pgbackup -N "" -C "homeserver-pgbackup"
+   ```
+   No passphrase — this needs to run unattended via cron. Key secrecy isn't the security
+   boundary here; the forced command in step 2 is.
 2. **Add the public key to the VPS's `/root/.ssh/authorized_keys` with a forced
-   command**, so it can never be used for anything except the one dump command:
+   command**, so it can never be used for anything except the one dump command,
+   regardless of what command is actually requested over that connection:
    ```
-   command="docker exec taskpad-db-1 pg_dump -U taskapp taskapp",no-port-forwarding,no-agent-forwarding,no-pty ssh-ed25519 AAAA... homeserver-pgbackup
+   command="docker exec taskpad-db-1 pg_dump -U taskapp taskapp",no-port-forwarding,no-agent-forwarding,no-pty ssh-ed25519 AAAA...homeserver-pgbackup-key-here homeserver-pgbackup
    ```
-3. **Verify the restriction actually works**: confirm the key can run the dump command,
-   and confirm it *cannot* run anything else (e.g. `ssh -i key vps 'whoami'` should be
-   rejected or forced back to the dump command regardless of what's requested).
-4. **Connect over Tailscale, not the public IP** — need the VPS's Tailscale address
-   (`tailscale status` on the VPS, or check what's already known from the original
-   Phase 4/5 Tailscale bridge setup).
-5. **Write `scripts/backup-postgres.sh`** on the Home Server (mirrors
-   `scripts/backup-notes.sh`'s style): pulls the dump via the restricted key, saves it
-   locally as `~/taskpad-pg-backups/taskpad-YYYYMMDD-HHMMSS.sql`, prunes local copies
-   older than 14 days.
-6. **Install and configure `rclone`** on the Home Server with a Google Drive remote —
-   this needs one-time interactive OAuth consent (browser-based), which only the user
-   can complete, same category of step as the earlier SSH `ControlMaster` unlock.
-7. **Extend the script** to upload the fresh dump to the configured Drive folder via
-   `rclone copy`, and prune Drive-side copies older than 14 days (`rclone` supports this
-   directly, e.g. via `rclone delete --min-age 14d` on the target folder).
-8. **Cron it** — daily, per spec §9 (notes backup is every 15 min because notes change
-   throughout the day; Postgres dump content only needs a daily cadence).
-9. **End-to-end verification**: run once manually, confirm both the local file and the
-   Drive file exist and are non-empty/valid SQL dumps, confirm the restricted key
-   genuinely can't do anything beyond the dump command.
+   (the real public key from step 1 goes in place of the placeholder above)
+3. **Find the VPS's Tailscale address** — connect over Tailscale, not the public IP/port,
+   so this new automated credential never touches the public internet-facing SSH port.
+   Check via `tailscale status` on the VPS, or pull from what's already known from the
+   original Phase 4/5 Tailscale bridge setup (Home Server's own Tailscale IP is already
+   known: `100.125.184.106`).
+4. **Verify the restriction actually works**, from the Home Server:
+   - `ssh -i ~/.ssh/taskpad_pgbackup root@<vps-tailscale-ip>` with no command → should
+     run the forced `pg_dump` command and print SQL to stdout, not an interactive shell.
+   - `ssh -i ~/.ssh/taskpad_pgbackup root@<vps-tailscale-ip> 'whoami'` → should **still**
+     just run the forced dump command (proving the restriction can't be overridden by
+     requesting a different command), not actually run `whoami`.
 
-## Open question before executing
+### Phase 2 — Home Server does periodic download of the data
 
-Step 6 (rclone + Google Drive OAuth) requires you to complete a browser-based consent
-flow interactively on the Home Server (or wherever `rclone config` is run) — same
-category of manual step as the SSH unlock in Execution 1. I'll walk through the exact
-commands when we get there, but flagging now that it's not something I can do
-unattended.
+Local backup only at this point — no Google Drive involved yet. This alone already
+solves "one copy of the live data off the VPS."
+
+5. **Write `scripts/backup-postgres.sh`** on the Home Server, mirroring
+   `scripts/backup-notes.sh`'s style (same repo, same pattern):
+   - Runs the dump over the Phase 1 connection:
+     `ssh -i ~/.ssh/taskpad_pgbackup root@<vps-tailscale-ip> > ~/taskpad-pg-backups/taskpad-$(date +%Y%m%d-%H%M%S).sql`
+   - Creates `~/taskpad-pg-backups/` if it doesn't exist.
+   - Prunes local copies older than 14 days (e.g.
+     `find ~/taskpad-pg-backups -name '*.sql' -mtime +14 -delete`).
+6. **Cron it daily** on the Home Server (notes backup is every 15 min because notes
+   change throughout the day; a Postgres dump only needs a daily cadence per spec §9):
+   ```
+   0 3 * * * /home/pchen/projects/taskpad_mcp/scripts/backup-postgres.sh
+   ```
+7. **Verify**: run the script once manually, confirm a non-empty, valid-looking SQL dump
+   file appears locally (e.g. starts with `-- PostgreSQL database dump`), confirm the
+   14-day pruning logic doesn't delete anything on a fresh run (nothing old enough yet).
+
+### Phase 3 — Home Server crons the backup to Google Drive
+
+Building on Phase 2's local file — uploads the same dump onward, doesn't change how
+it's produced.
+
+8. **Install `rclone`** on the Home Server.
+9. **Configure a Google Drive remote**: `rclone config` — walks through picking "Google
+   Drive" as the remote type, then opens a browser for a one-time OAuth consent. **This
+   step needs you interactively** — same category of manual step as the SSH
+   `ControlMaster` unlock in Execution 1, I can't complete it unattended. I'll give exact
+   commands when we get here.
+10. **Extend `backup-postgres.sh`** to also upload the fresh dump to the configured
+    Drive folder right after saving it locally:
+    ```
+    rclone copy ~/taskpad-pg-backups/taskpad-<timestamp>.sql gdrive:taskpad-backups/
+    ```
+11. **Prune the Drive side too**, same 14-day retention, via `rclone`'s own age filter:
+    ```
+    rclone delete --min-age 14d gdrive:taskpad-backups/
+    ```
+12. **End-to-end verification**: run the full script once, confirm the file appears in
+    the actual Google Drive folder (not just locally), confirm content matches the local
+    copy.
