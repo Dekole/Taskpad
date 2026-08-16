@@ -161,6 +161,40 @@ export async function listNotes(params: { project?: string }): Promise<NoteSumma
   return results;
 }
 
+export async function getProjectAllNotes(project?: string): Promise<{ project: string; content: string }> {
+  const projectName = normalizeProject(project);
+  const folder = await findRootFolder(projectName);
+  if (!folder) {
+    throw new Error(`Project "${projectName}" does not exist.`);
+  }
+
+  const notes = await listNotesIn(folder.id);
+  // Always prepend "# {name}" explicitly rather than trusting each note's own
+  // content to already have a reliable top-level heading - some notes start
+  // with a sub-heading ("## ...") or a hashtag-style tag ("#tag ..."), both of
+  // which pass saveNote's naive `startsWith("#")` check without actually being
+  // the note's own title line, which would otherwise blend into the previous
+  // note's section with no boundary.
+  const combined = notes
+    .sort((a, b) => a.name.localeCompare(b.name))
+    .map((n) => {
+      const trimmed = (n.content ?? "").trim();
+      const ownTitleLine = `# ${n.name}`;
+      // Strip an exact-match leading title line before re-adding it, so most
+      // notes (whose content already embeds "# {name}") don't get a visibly
+      // duplicated header. Doesn't fire for the sub-heading/hashtag edge
+      // cases above, or for deduped names ("X (2)") whose embedded heading
+      // still says the pre-dedup title - acceptable, rare, still bounded.
+      const body = trimmed.startsWith(ownTitleLine)
+        ? trimmed.slice(ownTitleLine.length).trimStart()
+        : trimmed;
+      return `# ${n.name}\n\n${body}`;
+    })
+    .join("\n\n");
+
+  return { project: projectName, content: combined };
+}
+
 export async function searchNotes(params: { query: string; project?: string }): Promise<SearchResult[]> {
   const folders = params.project ? [await findRootFolder(normalizeProject(params.project))] : await listRootFolders();
   const needle = params.query.toLowerCase();

@@ -122,5 +122,21 @@ export function createServer(): McpServer {
     }
   );
 
+  server.tool(
+    "get_project_all_notes",
+    'Fetch every note in a project as one combined document, each note as its own section. If project is omitted, uses the "default" project.',
+    {
+      project: z.string().optional().describe('Project name, defaults to "default"'),
+    },
+    async ({ project }) => {
+      try {
+        const result = await storage.getProjectAllNotes(project);
+        return textResult(result.content || `No notes in project "${result.project}".`);
+      } catch (err) {
+        return errorResult(err);
+      }
+    }
+  );
+
   return server;
 }
