@@ -85,7 +85,7 @@ New router, e.g. `app/routers/pad.py`:
 
 - Remove `storage.ts` (flat-file logic). Replace with an API client module calling the new `task-app` endpoints above.
 - **Auth gap to close before this ships**: `task-app`'s current auth is "trust the `user_id` you're given." That was fine when only the App's own frontend (behind Google login in the browser) called it. Once `Taskpad_MCP` — a second, independently-reachable service — writes to the same API, it needs the same level of identity verification `Taskpad_MCP` already built for itself (it already gates on `ALLOWED_GOOGLE_EMAIL` via its own OAuth flow). Simplest fix: `Taskpad_MCP` calls `task-app`'s API using a fixed service credential (shared secret, VPS-internal traffic only, never exposed) rather than reinventing per-request user auth — single-user system, this doesn't need to be more elaborate than that.
-- MCP tool surface expands: `save_note`/`get_note`/`list_notes`/`search_notes` map onto the new `/pad` endpoints (project ≈ top-level folder row); add `create_folder`, `move_pad`, and a `summarize_person`-style tool Claude can call in-conversation per the "Claude decides in-conversation" summarization path.
+- MCP tool surface expands: `save_note`/`get_note`/`list_notes`/`search_notes` map onto the new `/pad` endpoints (project ≈ top-level folder row); add `create_folder`, `move_pad`, `get_project_all_notes` (added 2026-08-15, see §8a), and a `summarize_person`-style tool Claude can call in-conversation per the "Claude decides in-conversation" summarization path.
 - Existing static-bearer-token + OAuth dual auth on `/mcp` itself is unaffected — this is about how `Taskpad_MCP` talks *outward* to the DB API, not how clients talk to `Taskpad_MCP`.
 
 ## 7. Background summarizer job
@@ -98,6 +98,24 @@ New router, e.g. `app/routers/pad.py`:
 
 - Script (can live in `taskpad_mcp/scripts/` or a new small tool) that calls `GET /pad/tree` and writes each pad row to `<vault>/<path-from-root>/<name>.md`, folders as directories, `content` as the file body, `summary` as a header block or frontmatter.
 - Run manually on demand initially; cron later if it proves useful. One-directional (DB → local files) — do not build local-edit-syncs-back for v1, that's a much bigger problem (conflict resolution) and wasn't asked for.
+
+## 8a. Local project-notes sync (added 2026-08-15)
+
+A second, distinct local-access mechanism alongside §8's nested vault export — one flat
+document per project instead of one file per note. Designed with productization in
+mind: runs entirely through the MCP connector any customer's Claude Code already has,
+no server-side script, no new API surface beyond the one new tool.
+
+- New MCP tool `get_project_all_notes(project?)`: concatenates every note in a project
+  into one document. No new backend endpoint - reuses the existing per-project notes
+  fetch already in `api-client.ts`, joining each note's `content` (already `# {title}`
+  -prefixed by `save_note`, so concatenation alone produces the "one `#` section per
+  note" shape with no extra formatting logic).
+- Claude Code Skill: for each project (`list_projects` → `get_project_all_notes` per
+  project), writes `<location>/<project>.md`. Overwrites in place every run. Prunes
+  local files for projects no longer present upstream. Prepends an
+  auto-generated/synced-at marker to each file. Target location configurable, defaults
+  to `~/TaskpadNotes/`, outside any git repo.
 
 ## 9. Backup
 
