@@ -6,7 +6,8 @@
   "scripts": {
     "build": "tsc -p tsconfig.json",
     "start": "node dist/index.js",
-    "dev": "tsx watch src/index.ts"
+    "dev": "tsx watch src/index.ts",
+    "test:live": "tsx scripts/test-taskpad.ts"
   },
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.12.0",
