@@ -10,9 +10,9 @@ services:
     restart: unless-stopped
 
   backend:
-    build: ./backend
+    build: ./app/backend
     volumes:
-      - ./backend:/app
+      - ./app/backend:/app
       - ./secrets:/secrets:ro
     env_file:
       - .env
@@ -22,9 +22,36 @@ services:
 
   frontend:
     build:
-      context: ./frontend
+      context: ./app/frontend
       args:
         VITE_API_URL: https://taskpad.duckdns.org
+    restart: unless-stopped
+
+  # MCP server. Deliberately NOT env_file: .env - that would inject
+  # DATABASE_URL and POSTGRES_PASSWORD into the one internet-facing
+  # service that has no use for them. ${VAR:?} makes Compose refuse to
+  # start on a missing secret rather than substituting an empty string.
+  mcp:
+    build: ./mcp
+    image: taskpad-mcp:latest
+    container_name: taskpad-mcp
+    ports:
+      - "127.0.0.1:3003:3000"
+    environment:
+      OAUTH_DIR: /data/oauth
+      MCP_AUTH_TOKEN: ${MCP_AUTH_TOKEN:?}
+      PUBLIC_BASE_URL: ${PUBLIC_BASE_URL:?}
+      GOOGLE_CLIENT_ID: ${GOOGLE_CLIENT_ID:?}
+      GOOGLE_CLIENT_SECRET: ${GOOGLE_CLIENT_SECRET:?}
+      ALLOWED_GOOGLE_EMAIL: ${ALLOWED_GOOGLE_EMAIL:?}
+      MCP_JWT_SECRET: ${MCP_JWT_SECRET:?}
+      TASKPAD_API_URL: ${TASKPAD_API_URL:?}
+      TASKPAD_SERVICE_TOKEN: ${TASKPAD_SERVICE_TOKEN:?}
+      TASKPAD_USER_ID: ${TASKPAD_USER_ID:?}
+    volumes:
+      - ./mcp/data:/data
+    depends_on:
+      - backend
     restart: unless-stopped
 
   caddy:
@@ -43,6 +70,7 @@ services:
     depends_on:
       - frontend
       - backend
+      - mcp
     restart: unless-stopped
 
 volumes:
