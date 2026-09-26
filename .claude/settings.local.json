@@ -9,7 +9,13 @@
       "Bash(docker-credential-desktop.exe list *)",
       "Bash(echo \"Started in background, PID: $!\")",
       "Bash(wait)",
-      "Bash(docker-compose ps *)"
+      "Bash(docker-compose ps *)",
+      "Bash(echo \"Exit: $?\")",
+      "Bash(docker exec taskpad-backend-1 *)",
+      "Bash(python3 -m json.tool)",
+      "Bash(git -C /home/pchen/projects/taskpad status)",
+      "Bash(git -C /home/pchen/projects/taskpad diff --stat)",
+      "Bash(git *)"
     ]
   }
 }
