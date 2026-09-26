@@ -1,0 +1,274 @@
+<mxfile host="app.diagrams.net">
+  <diagram name="Tasks Wireframe" id="tasks-wireframe">
+    <mxGraphModel dx="800" dy="600" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="920" pageHeight="820" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+
+        <!-- Background -->
+        <mxCell id="bg" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#F8FAFC;strokeColor=none;" vertex="1" parent="1">
+          <mxGeometry x="0" y="0" width="920" height="800" as="geometry" />
+        </mxCell>
+
+        <!-- Header -->
+        <mxCell id="header" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=none;" vertex="1" parent="1">
+          <mxGeometry x="0" y="0" width="920" height="72" as="geometry" />
+        </mxCell>
+        <mxCell id="headerLine" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#E2E8F0;strokeColor=none;" vertex="1" parent="1">
+          <mxGeometry x="0" y="71" width="920" height="1" as="geometry" />
+        </mxCell>
+        <mxCell id="title" value="Tasks" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontColor=#1E293B;fontSize=26;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="30" y="14" width="160" height="44" as="geometry" />
+        </mxCell>
+        <mxCell id="avatar" value="P" style="ellipse;whiteSpace=wrap;html=1;fillColor=#BFDBFE;strokeColor=none;fontColor=#1E40AF;fontStyle=1;fontSize=14;" vertex="1" parent="1">
+          <mxGeometry x="694" y="18" width="36" height="36" as="geometry" />
+        </mxCell>
+        <mxCell id="userName" value="Peter Chen" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontColor=#1E293B;fontSize=15;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="738" y="18" width="100" height="36" as="geometry" />
+        </mxCell>
+        <mxCell id="dropdownArrow" value="&#9662;" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontColor=#94A3B8;fontSize=14;" vertex="1" parent="1">
+          <mxGeometry x="828" y="18" width="20" height="36" as="geometry" />
+        </mxCell>
+
+        <!-- Active Tasks section labels -->
+        <mxCell id="activeLabel" value="ACTIVE TASKS" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontColor=#94A3B8;fontSize=13;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="30" y="92" width="140" height="24" as="geometry" />
+        </mxCell>
+        <mxCell id="activeCount" value="0" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontColor=#94A3B8;fontSize=13;" vertex="1" parent="1">
+          <mxGeometry x="172" y="92" width="30" height="24" as="geometry" />
+        </mxCell>
+        <mxCell id="dueColLabel1" value="Due" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontColor=#94A3B8;fontSize=13;" vertex="1" parent="1">
+          <mxGeometry x="650" y="92" width="50" height="24" as="geometry" />
+        </mxCell>
+        <mxCell id="catColLabel1" value="Cat." style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontColor=#94A3B8;fontSize=13;" vertex="1" parent="1">
+          <mxGeometry x="735" y="92" width="50" height="24" as="geometry" />
+        </mxCell>
+        <mxCell id="staleColLabel1" value="Stale" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontColor=#94A3B8;fontSize=13;" vertex="1" parent="1">
+          <mxGeometry x="778" y="92" width="50" height="24" as="geometry" />
+        </mxCell>
+
+        <!-- Input card -->
+        <mxCell id="inputCard" value="" style="rounded=1;arcSize=8;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#E2E8F0;" vertex="1" parent="1">
+          <mxGeometry x="30" y="128" width="860" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="placeholder" value="Add a new task..." style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontColor=#CBD5E1;fontSize=14;" vertex="1" parent="1">
+          <mxGeometry x="50" y="128" width="220" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="dateInput" value="" style="rounded=1;arcSize=20;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#CBD5E1;" vertex="1" parent="1">
+          <mxGeometry x="465" y="143" width="145" height="32" as="geometry" />
+        </mxCell>
+        <mxCell id="dateText" value="mm/dd/yyyy" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontColor=#CBD5E1;fontSize=13;" vertex="1" parent="1">
+          <mxGeometry x="478" y="143" width="100" height="32" as="geometry" />
+        </mxCell>
+        <mxCell id="calIcon" value="&#128197;" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=14;" vertex="1" parent="1">
+          <mxGeometry x="582" y="143" width="22" height="32" as="geometry" />
+        </mxCell>
+        <mxCell id="radioGray" value="" style="ellipse;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#CBD5E1;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="622" y="146" width="26" height="26" as="geometry" />
+        </mxCell>
+        <mxCell id="radioGreen" value="" style="ellipse;whiteSpace=wrap;html=1;fillColor=#22C55E;strokeColor=none;" vertex="1" parent="1">
+          <mxGeometry x="658" y="146" width="26" height="26" as="geometry" />
+        </mxCell>
+        <mxCell id="radioYellow" value="" style="ellipse;whiteSpace=wrap;html=1;fillColor=#FBBF24;strokeColor=none;" vertex="1" parent="1">
+          <mxGeometry x="694" y="146" width="26" height="26" as="geometry" />
+        </mxCell>
+        <mxCell id="radioRed" value="" style="ellipse;whiteSpace=wrap;html=1;fillColor=#EF4444;strokeColor=none;" vertex="1" parent="1">
+          <mxGeometry x="730" y="146" width="26" height="26" as="geometry" />
+        </mxCell>
+        <mxCell id="addBtn" value="+ Add" style="rounded=1;arcSize=15;whiteSpace=wrap;html=1;fillColor=#2563EB;strokeColor=none;fontColor=#FFFFFF;fontStyle=1;fontSize=14;" vertex="1" parent="1">
+          <mxGeometry x="770" y="143" width="100" height="36" as="geometry" />
+        </mxCell>
+
+        <!-- No tasks here -->
+        <mxCell id="noTasks" value="No tasks here." style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontColor=#CBD5E1;fontStyle=2;fontSize=14;" vertex="1" parent="1">
+          <mxGeometry x="50" y="210" width="200" height="30" as="geometry" />
+        </mxCell>
+
+        <!-- Tabs -->
+        <mxCell id="tabDone" value="Done  6" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontColor=#2563EB;fontSize=15;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="30" y="285" width="80" height="32" as="geometry" />
+        </mxCell>
+        <mxCell id="tabDoneUnderline" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#2563EB;strokeColor=none;" vertex="1" parent="1">
+          <mxGeometry x="30" y="320" width="62" height="3" as="geometry" />
+        </mxCell>
+        <mxCell id="tabBacklog" value="Backlog  0" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontColor=#64748B;fontSize=15;" vertex="1" parent="1">
+          <mxGeometry x="145" y="285" width="100" height="32" as="geometry" />
+        </mxCell>
+        <mxCell id="tabExpired" value="Expired  19" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontColor=#64748B;fontSize=15;" vertex="1" parent="1">
+          <mxGeometry x="265" y="285" width="100" height="32" as="geometry" />
+        </mxCell>
+        <mxCell id="tabsDivider" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#E2E8F0;strokeColor=none;" vertex="1" parent="1">
+          <mxGeometry x="20" y="335" width="880" height="1" as="geometry" />
+        </mxCell>
+
+        <!-- Column headers row 2 -->
+        <mxCell id="dueColLabel2" value="Due" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontColor=#94A3B8;fontSize=12;fontStyle=2;" vertex="1" parent="1">
+          <mxGeometry x="650" y="345" width="50" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="catColLabel2" value="Cat." style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontColor=#94A3B8;fontSize=12;fontStyle=2;" vertex="1" parent="1">
+          <mxGeometry x="735" y="345" width="50" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="staleColLabel2" value="Stale" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontColor=#94A3B8;fontSize=12;fontStyle=2;" vertex="1" parent="1">
+          <mxGeometry x="778" y="345" width="50" height="20" as="geometry" />
+        </mxCell>
+
+        <!-- Row 1 -->
+        <mxCell id="row1" value="" style="rounded=1;arcSize=6;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#F1F5F9;" vertex="1" parent="1">
+          <mxGeometry x="30" y="378" width="860" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="grip1" value="&#10241;" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontColor=#CBD5E1;fontSize=18;" vertex="1" parent="1">
+          <mxGeometry x="48" y="378" width="20" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="check1" value="&#10003;" style="rounded=1;arcSize=40;whiteSpace=wrap;html=1;fillColor=#94A3B8;strokeColor=none;fontColor=#FFFFFF;fontStyle=1;fontSize=14;" vertex="1" parent="1">
+          <mxGeometry x="78" y="391" width="26" height="26" as="geometry" />
+        </mxCell>
+        <mxCell id="text1" value="thank you letter for Shepherd" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontColor=#94A3B8;fontStyle=2;fontSize=14;" vertex="1" parent="1">
+          <mxGeometry x="120" y="378" width="460" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="due1" value="No due date" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontColor=#CBD5E1;fontStyle=2;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="595" y="378" width="120" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="cat1" value="" style="rounded=1;arcSize=15;whiteSpace=wrap;html=1;fillColor=#EF4444;strokeColor=none;" vertex="1" parent="1">
+          <mxGeometry x="735" y="391" width="24" height="24" as="geometry" />
+        </mxCell>
+        <mxCell id="stale1" value="20" style="rounded=1;arcSize=40;whiteSpace=wrap;html=1;fillColor=#FEE2E2;strokeColor=none;fontColor=#EF4444;fontSize=12;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="775" y="392" width="36" height="22" as="geometry" />
+        </mxCell>
+        <mxCell id="chev1" value="&#9662;" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontColor=#CBD5E1;fontSize=16;" vertex="1" parent="1">
+          <mxGeometry x="826" y="378" width="20" height="50" as="geometry" />
+        </mxCell>
+
+        <!-- Row 2 -->
+        <mxCell id="row2" value="" style="rounded=1;arcSize=6;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#F1F5F9;" vertex="1" parent="1">
+          <mxGeometry x="30" y="438" width="860" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="grip2" value="&#10241;" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontColor=#CBD5E1;fontSize=18;" vertex="1" parent="1">
+          <mxGeometry x="48" y="438" width="20" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="check2" value="&#10003;" style="rounded=1;arcSize=40;whiteSpace=wrap;html=1;fillColor=#94A3B8;strokeColor=none;fontColor=#FFFFFF;fontStyle=1;fontSize=14;" vertex="1" parent="1">
+          <mxGeometry x="78" y="451" width="26" height="26" as="geometry" />
+        </mxCell>
+        <mxCell id="text2" value="finish prep for Cloudera" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontColor=#94A3B8;fontStyle=2;fontSize=14;" vertex="1" parent="1">
+          <mxGeometry x="120" y="438" width="460" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="due2" value="No due date" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontColor=#CBD5E1;fontStyle=2;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="595" y="438" width="120" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="cat2" value="" style="rounded=1;arcSize=15;whiteSpace=wrap;html=1;fillColor=#F1F5F9;strokeColor=#E2E8F0;" vertex="1" parent="1">
+          <mxGeometry x="735" y="451" width="24" height="24" as="geometry" />
+        </mxCell>
+        <mxCell id="stale2" value="27" style="rounded=1;arcSize=40;whiteSpace=wrap;html=1;fillColor=#FEE2E2;strokeColor=none;fontColor=#EF4444;fontSize=12;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="775" y="452" width="36" height="22" as="geometry" />
+        </mxCell>
+        <mxCell id="chev2" value="&#9662;" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontColor=#CBD5E1;fontSize=16;" vertex="1" parent="1">
+          <mxGeometry x="826" y="438" width="20" height="50" as="geometry" />
+        </mxCell>
+
+        <!-- Row 3 -->
+        <mxCell id="row3" value="" style="rounded=1;arcSize=6;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#F1F5F9;" vertex="1" parent="1">
+          <mxGeometry x="30" y="498" width="860" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="grip3" value="&#10241;" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontColor=#CBD5E1;fontSize=18;" vertex="1" parent="1">
+          <mxGeometry x="48" y="498" width="20" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="check3" value="&#10003;" style="rounded=1;arcSize=40;whiteSpace=wrap;html=1;fillColor=#94A3B8;strokeColor=none;fontColor=#FFFFFF;fontStyle=1;fontSize=14;" vertex="1" parent="1">
+          <mxGeometry x="78" y="511" width="26" height="26" as="geometry" />
+        </mxCell>
+        <mxCell id="text3" value="test2" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontColor=#94A3B8;fontStyle=2;fontSize=14;" vertex="1" parent="1">
+          <mxGeometry x="120" y="498" width="460" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="due3" value="No due date" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontColor=#CBD5E1;fontStyle=2;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="595" y="498" width="120" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="cat3" value="" style="rounded=1;arcSize=15;whiteSpace=wrap;html=1;fillColor=#F1F5F9;strokeColor=#E2E8F0;" vertex="1" parent="1">
+          <mxGeometry x="735" y="511" width="24" height="24" as="geometry" />
+        </mxCell>
+        <mxCell id="stale3" value="1" style="rounded=1;arcSize=40;whiteSpace=wrap;html=1;fillColor=#E2E8F0;strokeColor=none;fontColor=#64748B;fontSize=12;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="775" y="512" width="36" height="22" as="geometry" />
+        </mxCell>
+        <mxCell id="chev3" value="&#9662;" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontColor=#CBD5E1;fontSize=16;" vertex="1" parent="1">
+          <mxGeometry x="826" y="498" width="20" height="50" as="geometry" />
+        </mxCell>
+
+        <!-- Row 4 -->
+        <mxCell id="row4" value="" style="rounded=1;arcSize=6;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#F1F5F9;" vertex="1" parent="1">
+          <mxGeometry x="30" y="558" width="860" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="grip4" value="&#10241;" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontColor=#CBD5E1;fontSize=18;" vertex="1" parent="1">
+          <mxGeometry x="48" y="558" width="20" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="check4" value="&#10003;" style="rounded=1;arcSize=40;whiteSpace=wrap;html=1;fillColor=#94A3B8;strokeColor=none;fontColor=#FFFFFF;fontStyle=1;fontSize=14;" vertex="1" parent="1">
+          <mxGeometry x="78" y="571" width="26" height="26" as="geometry" />
+        </mxCell>
+        <mxCell id="text4" value="prep for acuityMD interview" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontColor=#94A3B8;fontStyle=2;fontSize=14;" vertex="1" parent="1">
+          <mxGeometry x="120" y="558" width="460" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="due4" value="No due date" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontColor=#CBD5E1;fontStyle=2;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="595" y="558" width="120" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="cat4" value="" style="rounded=1;arcSize=15;whiteSpace=wrap;html=1;fillColor=#F1F5F9;strokeColor=#E2E8F0;" vertex="1" parent="1">
+          <mxGeometry x="735" y="571" width="24" height="24" as="geometry" />
+        </mxCell>
+        <mxCell id="stale4" value="27" style="rounded=1;arcSize=40;whiteSpace=wrap;html=1;fillColor=#FEE2E2;strokeColor=none;fontColor=#EF4444;fontSize=12;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="775" y="572" width="36" height="22" as="geometry" />
+        </mxCell>
+        <mxCell id="chev4" value="&#9662;" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontColor=#CBD5E1;fontSize=16;" vertex="1" parent="1">
+          <mxGeometry x="826" y="558" width="20" height="50" as="geometry" />
+        </mxCell>
+
+        <!-- Row 5 (two-line) -->
+        <mxCell id="row5" value="" style="rounded=1;arcSize=6;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#F1F5F9;" vertex="1" parent="1">
+          <mxGeometry x="30" y="618" width="860" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="grip5" value="&#10241;" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontColor=#CBD5E1;fontSize=18;" vertex="1" parent="1">
+          <mxGeometry x="48" y="618" width="20" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="check5" value="&#10003;" style="rounded=1;arcSize=40;whiteSpace=wrap;html=1;fillColor=#94A3B8;strokeColor=none;fontColor=#FFFFFF;fontStyle=1;fontSize=14;" vertex="1" parent="1">
+          <mxGeometry x="78" y="641" width="26" height="26" as="geometry" />
+        </mxCell>
+        <mxCell id="text5" value="fix dashboard spend numbers (for example - This week's Agency spend should be much greater than today's potential savings) - may..." style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontColor=#94A3B8;fontStyle=2;fontSize=14;whiteSpace=wrap;" vertex="1" parent="1">
+          <mxGeometry x="120" y="618" width="460" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="due5" value="No due date" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontColor=#CBD5E1;fontStyle=2;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="595" y="618" width="120" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="cat5" value="" style="rounded=1;arcSize=15;whiteSpace=wrap;html=1;fillColor=#FBBF24;strokeColor=none;" vertex="1" parent="1">
+          <mxGeometry x="735" y="631" width="24" height="24" as="geometry" />
+        </mxCell>
+        <mxCell id="stale5" value="10" style="rounded=1;arcSize=40;whiteSpace=wrap;html=1;fillColor=#FEE2E2;strokeColor=none;fontColor=#EF4444;fontSize=12;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="775" y="632" width="36" height="22" as="geometry" />
+        </mxCell>
+        <mxCell id="chev5" value="&#9662;" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontColor=#CBD5E1;fontSize=16;" vertex="1" parent="1">
+          <mxGeometry x="826" y="618" width="20" height="70" as="geometry" />
+        </mxCell>
+
+        <!-- Row 6 (two-line) -->
+        <mxCell id="row6" value="" style="rounded=1;arcSize=6;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#F1F5F9;" vertex="1" parent="1">
+          <mxGeometry x="30" y="698" width="860" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="grip6" value="&#10241;" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontColor=#CBD5E1;fontSize=18;" vertex="1" parent="1">
+          <mxGeometry x="48" y="698" width="20" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="check6" value="&#10003;" style="rounded=1;arcSize=40;whiteSpace=wrap;html=1;fillColor=#94A3B8;strokeColor=none;fontColor=#FFFFFF;fontStyle=1;fontSize=14;" vertex="1" parent="1">
+          <mxGeometry x="78" y="721" width="26" height="26" as="geometry" />
+        </mxCell>
+        <mxCell id="text6" value="when we chose someone to fill a gap, need to remove that person in cross-unit assignment" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontColor=#94A3B8;fontStyle=2;fontSize=14;whiteSpace=wrap;" vertex="1" parent="1">
+          <mxGeometry x="120" y="698" width="460" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="due6" value="No due date" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontColor=#CBD5E1;fontStyle=2;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="595" y="698" width="120" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="cat6" value="" style="rounded=1;arcSize=15;whiteSpace=wrap;html=1;fillColor=#FBBF24;strokeColor=none;" vertex="1" parent="1">
+          <mxGeometry x="735" y="711" width="24" height="24" as="geometry" />
+        </mxCell>
+        <mxCell id="stale6" value="10" style="rounded=1;arcSize=40;whiteSpace=wrap;html=1;fillColor=#FEE2E2;strokeColor=none;fontColor=#EF4444;fontSize=12;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="775" y="712" width="36" height="22" as="geometry" />
+        </mxCell>
+        <mxCell id="chev6" value="&#9662;" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontColor=#CBD5E1;fontSize=16;" vertex="1" parent="1">
+          <mxGeometry x="826" y="698" width="20" height="70" as="geometry" />
+        </mxCell>
+
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
