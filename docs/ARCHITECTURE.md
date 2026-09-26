@@ -1,4 +1,13 @@
-# Architecture Document — Taskpad
+# Architecture Document — Taskpad (app-level detail)
+
+> **Scope, clarified 2026-09-26.** This is the *application* deep-dive: per-service
+> internals, the Google auth flow, the task-CRUD data path and the original design
+> rationale. It predates the MCP server, the `pad` note store and the deploy webhook,
+> so it describes four services, not five.
+>
+> For the **system-level** picture of the merged repo — repository layout, all five
+> services, routing, invariants and secrets — see [`architecture.md`](architecture.md).
+> Kept rather than folded in, because the detail below is not repeated there.
 
 **Version:** 1.0  
 **Author:** Peter Chen  

@@ -3,11 +3,11 @@
 > **What the system *is*, after the `task-app` + `taskpad_mcp` merge.**
 > For *how we get there*, see [`ExecutionPlan.md`](ExecutionPlan.md).
 >
-> Status: **target state — not yet built.** Everything in §2–§6 is verified live on the VPS
-> as of 2026-09-20; §1 is the post-merge layout. Supersedes the scope of
+> Status: **LIVE as of 2026-09-26.** The merge shipped; this describes the system as it now
+> runs on the VPS. Verified against a full snapshot diff after cutover. Supersedes the scope of
 > `docs/ARCHITECTURE.md` v1.0 (June 2026), which predates the MCP server, the `pad` table
-> and the deploy webhook. At Phase 3 this file moves into the repo at `docs/architecture.md`
-> and that v1.0 doc is folded into it.
+> and the deploy webhook. That doc is **kept**, not folded in — it carries the per-service
+> internals, the Google auth flow and the task-CRUD data path, none of which are repeated here.
 
 ## 1. Repository layout
 
@@ -194,3 +194,6 @@ Carried forward from `taskpad_suite_steps.md`; none are introduced by the merge.
 - `create_folder`, `move_pad`, `delete_note` tools — named in the spec, absent.
 - Backend auth takes `user_id` as a parameter rather than verifying a session token per
   request. Acceptable for a single-user app; it is the reason `/api/pad` must stay internal.
+- **Google OAuth scope is broader than needed** (carried over from `readme.txt`, 2026-04-12):
+  the consent screen asks for more than the app uses. Ideally it would request permission to
+  edit a single sheet, so granting it feels less alarming. Never investigated.
