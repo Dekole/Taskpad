@@ -1,0 +1,40 @@
+<mxfile host="Electron">
+  <diagram name="Page-1" id="iILdOdYfqo-VTZLzLkDg">
+    <mxGraphModel dx="561" dy="328" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1100" pageHeight="850" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="bTVPyiq7itVlMVjapiyc-1" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="Phone&lt;div&gt;(Claude)&lt;/div&gt;" vertex="1">
+          <mxGeometry height="60" width="120" x="40" y="120" as="geometry" />
+        </mxCell>
+        <mxCell id="bTVPyiq7itVlMVjapiyc-10" edge="1" parent="1" source="bTVPyiq7itVlMVjapiyc-2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="bTVPyiq7itVlMVjapiyc-9">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="bTVPyiq7itVlMVjapiyc-2" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="Taskpad_MCP&lt;div&gt;Cloud VM&lt;/div&gt;" vertex="1">
+          <mxGeometry height="60" width="280" x="240" y="120" as="geometry" />
+        </mxCell>
+        <mxCell id="bTVPyiq7itVlMVjapiyc-5" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="Taskpad App&lt;div&gt;Cloud VM&lt;/div&gt;" vertex="1">
+          <mxGeometry height="60" width="120" x="400" y="240" as="geometry" />
+        </mxCell>
+        <mxCell id="bTVPyiq7itVlMVjapiyc-6" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="Google Auth" vertex="1">
+          <mxGeometry height="60" width="120" x="240" y="240" as="geometry" />
+        </mxCell>
+        <mxCell id="bTVPyiq7itVlMVjapiyc-7" edge="1" parent="1" source="bTVPyiq7itVlMVjapiyc-6" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.212;entryY=0.98;entryDx=0;entryDy=0;entryPerimeter=0;startArrow=classic;startFill=1;endArrow=classic;endFill=1;" target="bTVPyiq7itVlMVjapiyc-2">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="bTVPyiq7itVlMVjapiyc-8" edge="1" parent="1" source="bTVPyiq7itVlMVjapiyc-5" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.785;entryY=0.98;entryDx=0;entryDy=0;entryPerimeter=0;startArrow=classic;startFill=1;" target="bTVPyiq7itVlMVjapiyc-2">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="bTVPyiq7itVlMVjapiyc-12" edge="1" parent="1" source="bTVPyiq7itVlMVjapiyc-9" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" target="bTVPyiq7itVlMVjapiyc-11">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="bTVPyiq7itVlMVjapiyc-9" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="Taskpad_Home&lt;div&gt;Home Server&lt;/div&gt;" vertex="1">
+          <mxGeometry height="60" width="120" x="560" y="120" as="geometry" />
+        </mxCell>
+        <mxCell id="bTVPyiq7itVlMVjapiyc-11" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="Claude Code" vertex="1">
+          <mxGeometry height="60" width="120" x="720" y="120" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

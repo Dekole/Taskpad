@@ -1,0 +1,102 @@
+<mxfile host="Electron">
+  <diagram name="Page-1" id="target-arch-claude-1">
+    <mxGraphModel dx="1402" dy="819" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1300" pageHeight="900" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="pg" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" value="Postgres&lt;div&gt;VPS&lt;/div&gt;" vertex="1">
+          <mxGeometry height="60" width="220" x="692" y="40" as="geometry" />
+        </mxCell>
+        <mxCell id="api" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" value="Taskpad App API&lt;div&gt;VPS&lt;/div&gt;" vertex="1">
+          <mxGeometry height="60" width="220" x="405" y="170" as="geometry" />
+        </mxCell>
+        <mxCell id="backup" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" value="Backup cron&lt;div&gt;VPS&lt;/div&gt;" vertex="1">
+          <mxGeometry height="60" width="200" x="1000" y="170" as="geometry" />
+        </mxCell>
+        <mxCell id="ui" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;" value="Phone / Browser UI&lt;div&gt;Client&lt;/div&gt;" vertex="1">
+          <mxGeometry height="60" width="180" x="40" y="300" as="geometry" />
+        </mxCell>
+        <mxCell id="summarizer" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" value="Summarizer job&lt;div&gt;VPS&lt;/div&gt;" vertex="1">
+          <mxGeometry height="60" width="220" x="250" y="300" as="geometry" />
+        </mxCell>
+        <mxCell id="export" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;" value="Export script&lt;div&gt;Local machine&lt;/div&gt;" vertex="1">
+          <mxGeometry height="60" width="240" x="500" y="300" as="geometry" />
+        </mxCell>
+        <mxCell id="mcp" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" value="Taskpad_MCP&lt;div&gt;VPS&lt;/div&gt;" vertex="1">
+          <mxGeometry height="60" width="220" x="770" y="300" as="geometry" />
+        </mxCell>
+        <mxCell id="drive" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f5f5f5;fontColor=#333333;strokeColor=#666666;" value="Google Drive&lt;div&gt;Cloud&lt;/div&gt;" vertex="1">
+          <mxGeometry height="60" width="160" x="1020" y="300" as="geometry" />
+        </mxCell>
+        <mxCell id="vault" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;" value="Obsidian vault&lt;div&gt;Local machine&lt;/div&gt;" vertex="1">
+          <mxGeometry height="60" width="180" x="530" y="430" as="geometry" />
+        </mxCell>
+        <mxCell id="claude" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;" value="Claude&lt;div&gt;Mobile / Code&lt;/div&gt;" vertex="1">
+          <mxGeometry height="60" width="200" x="780" y="430" as="geometry" />
+        </mxCell>
+        <mxCell id="codecli" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;" value="Claude Code&lt;div&gt;Local machine&lt;/div&gt;" vertex="1">
+          <mxGeometry height="60" width="180" x="530" y="560" as="geometry" />
+        </mxCell>
+        <mxCell id="e-api-pg" edge="1" parent="1" source="api" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=classic;endFill=1;exitX=0.5;exitY=0;entryX=0.25;entryY=1;" target="pg">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e-backup-pg" edge="1" parent="1" source="backup" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;startArrow=classic;startFill=1;exitX=0.5;exitY=0;entryX=0.85;entryY=1;" target="pg" value="pg_dump">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e-ui-api" edge="1" parent="1" source="ui" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;startArrow=classic;startFill=1;endArrow=classic;endFill=1;exitX=0.5;exitY=0;entryX=0.15;entryY=1;" target="api">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e-summarizer-api" edge="1" parent="1" source="summarizer" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;startArrow=classic;startFill=1;endArrow=classic;endFill=1;exitX=0.5;exitY=0;entryX=0.4;entryY=1;" target="api" value="writes summary">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e-export-api" edge="1" parent="1" source="export" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;startArrow=classic;startFill=1;exitX=0.5;exitY=0;entryX=0.6;entryY=1;" target="api" value="reads tree">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e-mcp-api" edge="1" parent="1" source="mcp" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;startArrow=classic;startFill=1;endArrow=classic;endFill=1;exitX=0.5;exitY=0;entryX=0.85;entryY=1;" target="api" value="internal Docker network, service credential">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e-drive-backup" edge="1" parent="1" source="drive" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=classic;endFill=1;exitX=0.5;exitY=0;entryX=0.5;entryY=1;" target="backup">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e-vault-export" edge="1" parent="1" source="vault" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=classic;endFill=1;exitX=0.5;exitY=0;entryX=0.5;entryY=1;" target="export" value="writes files">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e-claude-mcp" edge="1" parent="1" source="claude" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;startArrow=classic;startFill=1;endArrow=classic;endFill=1;exitX=0.5;exitY=0;entryX=0.5;entryY=1;" target="mcp">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e-codecli-vault" edge="1" parent="1" source="codecli" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;startArrow=classic;startFill=1;exitX=0.5;exitY=0;entryX=0.5;entryY=1;" target="vault">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Legend -->
+        <mxCell id="legend-box" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;verticalAlign=top;align=left;fontStyle=1;fontSize=14;spacingTop=8;spacingLeft=10;" value="Legend" vertex="1">
+          <mxGeometry height="200" width="300" x="40" y="680" as="geometry" />
+        </mxCell>
+        <mxCell id="legend-swatch-vps" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" value="" vertex="1">
+          <mxGeometry height="24" width="24" x="60" y="720" as="geometry" />
+        </mxCell>
+        <mxCell id="legend-label-vps" parent="1" style="text;html=1;align=left;verticalAlign=middle;fontSize=12;" value="VPS" vertex="1">
+          <mxGeometry height="24" width="250" x="95" y="720" as="geometry" />
+        </mxCell>
+        <mxCell id="legend-swatch-home" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;" value="" vertex="1">
+          <mxGeometry height="24" width="24" x="60" y="755" as="geometry" />
+        </mxCell>
+        <mxCell id="legend-label-home" parent="1" style="text;html=1;align=left;verticalAlign=middle;fontSize=12;" value="Home server" vertex="1">
+          <mxGeometry height="24" width="250" x="95" y="755" as="geometry" />
+        </mxCell>
+        <mxCell id="legend-swatch-endpoint" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;" value="" vertex="1">
+          <mxGeometry height="24" width="24" x="60" y="790" as="geometry" />
+        </mxCell>
+        <mxCell id="legend-label-endpoint" parent="1" style="text;html=1;align=left;verticalAlign=middle;fontSize=12;" value="Endpoint" vertex="1">
+          <mxGeometry height="24" width="250" x="95" y="790" as="geometry" />
+        </mxCell>
+        <mxCell id="legend-swatch-cloud" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;" value="" vertex="1">
+          <mxGeometry height="24" width="24" x="60" y="825" as="geometry" />
+        </mxCell>
+        <mxCell id="legend-label-cloud" parent="1" style="text;html=1;align=left;verticalAlign=middle;fontSize=12;" value="Cloud / external service" vertex="1">
+          <mxGeometry height="24" width="250" x="95" y="825" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

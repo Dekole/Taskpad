@@ -1,0 +1,13 @@
+node_modules
+dist
+data
+.env
+*.log
+*.swp
+
+# drawio autosave/backup artifacts
+*.bkp
+.$*.dtmp
+
+# Obsidian per-machine UI state (app.json/appearance.json stay tracked)
+**/.obsidian/workspace.json
